@@ -2,16 +2,34 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Mock data: 5 MCQs with only questions
-const mcqs = [
-    "Is Paris the capital of France?",
-    "Is Mars the largest planet in our solar system?",
-    "Is the Pacific Ocean the largest ocean on Earth?",
-    "Did William Shakespeare write 'Hamlet'?",
-    "Is CO2 the chemical symbol for water?",
+[
+    {
+        question: "Is Paris the capital of France?",
+        option1: "Yes",
+        option2: "No",
+    },
+    {
+        question: "Is Mars the largest planet in our solar system?",
+        option1: "Yes",
+        option2: "No",
+    },
+    {
+        question: "Is the Pacific Ocean the largest ocean on Earth?",
+        option1: "Yes",
+        option2: "No",
+    },
+    {
+        question: "Did William Shakespeare write 'Hamlet'?",
+        option1: "Yes",
+        option2: "No",
+    },
+    {
+        question: "Is CO2 the chemical symbol for water?",
+        option1: "Yes",
+        option2: "No",
+    },
 ];
 
-// Endpoint to send only questions
 app.get("/api/mcqs", (req, res) => {
     res.json(mcqs);
 });
