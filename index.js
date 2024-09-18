@@ -1,45 +1,24 @@
 const express = require("express");
+require('dotenv').config();
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const PROMPT_TOKEN = process.env.PROMPT_TOKEN;
 const app = express();
 const PORT = process.env.PORT || 5000;
+const genAI = new GoogleGenerativeAI(PROMPT_TOKEN);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-const mcqs = [
-    {
-        question: "Is Paris the capital of France?",
-        option1: "Yes",
-        option2: "No",
-        answer: 'Yes'
-    },
-    {
-        question: "Is Mars the largest planet in our solar system?",
-        option1: "Yes",
-        option2: "No",
-        answer: 'Yes'
-    },
-    {
-        question: "Is the Pacific Ocean the largest ocean on Earth?",
-        option1: "Yes",
-        option2: "No",
-        answer: 'Yes'
-    },
-    {
-        question: "Did William Shakespeare write 'Hamlet'?",
-        option1: "Yes",
-        option2: "No",
-        answer: 'No'
-    },
-    {
-        question: "Is CO2 the chemical symbol for water?",
-        option1: "Yes",
-        option2: "No",
-        answer: 'No'
-    },
-];
+app.get("/api/mcqs", async (req, res) => {
+    const prompt = 'Give me 5 yes or no questions like array of objects where each object should have question and answer';
+    const result = await model.generateContent(prompt);
 
-app.get("/api/mcqs", (req, res) => {
-    res.json(mcqs);
+    const jsonString = result.response.text();
+    const data = jsonString.replace(/```json|```/g, '').trim();
+    const arrayOfObjects = JSON.parse(data);
+
+    res.json(arrayOfObjects);
 });
 
-// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
