@@ -9,7 +9,8 @@ const genAI = new GoogleGenerativeAI(PROMPT_TOKEN);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 app.get("/api/mcqs", async (req, res) => {
-    const prompt = 'Give me 5 yes or no questions like array of objects where each object should have question and answer';
+    const topic = req.headers?.topic || 'pet';
+    const prompt = `Give me 5 yes or no questions on the topic of ${topic} like array of objects where each object should have question and answer. Just give me the array or objects dont give any other unneccasry text other than that`;
     const result = await model.generateContent(prompt);
 
     const jsonString = result.response.text();
